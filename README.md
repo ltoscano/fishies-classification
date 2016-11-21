@@ -1,5 +1,5 @@
 # fishies-classification
-CNN with Keras in kaggle "The Nature Conservancy Fisheries Monitoring"
+CNN with Keras in kaggle competition "The Nature Conservancy Fisheries Monitoring"
 
 ## Usage
 You need to download some resources and extract it in the folder.
