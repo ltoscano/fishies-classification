@@ -18,12 +18,13 @@ from keras.callbacks import EarlyStopping
 from keras.utils import np_utils
 from keras import backend as K
 
-TRAIN_DIR = 'train/'
-TEST_DIR = 'test_stg1/'
+TRAIN_DIR = 'dataset/train/'
+TEST_DIR = 'dataset/test_stg1/'
 FISH_CLASSES = ['ALB', 'BET', 'DOL', 'LAG', 'NoF', 'OTHER', 'SHARK', 'YFT']
-ROWS = 90
-COLS = 160
+ROWS = 1280 / 10
+COLS = 720  / 10
 CHANNELS = 3
+np.random.seed(2016)
 
 def get_images(fish):
 	"""Load files from train folder"""
@@ -40,7 +41,7 @@ def read_image(src):
 def load_train_data():
 	'''Loading and Preprocessing Data'''
 	dim_ordering = K.image_dim_ordering()
-	file_name = "XY-Train-%s.dat" %dim_ordering
+	file_name = "pkl/XY-Train-%s.dat" %dim_ordering
 	if os.path.exists(file_name):
 		X_all, y_all = joblib.load(file_name)
 		return X_all, y_all
@@ -85,7 +86,7 @@ def load_train_data():
 def load_test_data():
 	'''Loading Test Data'''
 	dim_ordering = K.image_dim_ordering()
-	file_name = "XY-Test-%s.dat" %dim_ordering
+	file_name = "pkl/XY-Test-%s.dat" %dim_ordering
 	if os.path.exists(file_name):
 		X_test, test_files = joblib.load(file_name)
 		return X_test, test_files
@@ -215,7 +216,7 @@ def train(model, X_train, y_train, nb_epoch=50):
 			  callbacks=[early_stopping]
 	)
 
-	model_file = "model-weights-epoch%d.hdf5" %(nb_epoch)
+	model_file = "pkl/model-weights-epoch%d.hdf5" %(nb_epoch)
 	model.save(model_file, overwrite=True)
 	print
 
@@ -263,10 +264,11 @@ if __name__ == "__main__":
 	X_test, test_files = load_test_data()
 
 	# nb_epoch = 50
-	for nb_epoch in range(20, 60, 10):
+	for nb_epoch in range(15, 40, 5):
 		print "=" * 120
+		print "Epoch %d" %nb_epoch
 		model = create_model()
-		model_file = "model-weights-epoch%d.hdf5" %(nb_epoch)
+		model_file = "pkl/model-weights-epoch%d.hdf5" %(nb_epoch)
 		if os.path.exists(model_file):
 			model.load_weights(model_file)
 		else:
